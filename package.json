@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@prisma/client": "^6.9.0",
+		"@radix-ui/react-label": "^2.1.7",
 		"@radix-ui/react-separator": "^1.1.7",
 		"@radix-ui/react-slot": "^1.2.3",
 		"class-variance-authority": "^0.7.1",
@@ -22,17 +23,18 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-error-boundary": "^6.0.0",
-		"tailwind-merge": "^3.3.1"
+		"tailwind-merge": "^3.3.1",
+		"zod": "^3.25.67"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3",
 		"@tailwindcss/postcss": "^4",
+		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"eslint": "^9",
 		"eslint-config-next": "15.3.3",
-		"eslint-plugin-simple-import-sort": "^12.1.1",
 		"prettier": "3.5.3",
 		"prisma": "^6.9.0",
 		"tailwindcss": "^4",
