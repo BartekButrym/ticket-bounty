@@ -1,4 +1,4 @@
-## Prisma - wygenerowanie plików migracji
+## Prisma - Create the migration file
 
 ```bash
 npx prisma migrate dev --name init
@@ -14,7 +14,7 @@ albo pobrałem repo i na świeżo odpalam aplikację).
 npx prisma migrate deploy
 ```
 
-## Prisma - generowanie klienta Prisma
+## Prisma - generate Prisma client
 
 ```bash
 npx prisma generate

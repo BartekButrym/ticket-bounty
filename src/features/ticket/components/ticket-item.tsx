@@ -1,15 +1,22 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { Ticket } from "@prisma/client";
-import clsx from "clsx";
-import { Pencil, SquareArrowOutUpRight, Trash } from "lucide-react";
+import { Ticket } from '@prisma/client';
+import clsx from 'clsx';
+import { Pencil, SquareArrowOutUpRight, Trash } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TICKET_ICONS } from "@/features/constants";
-import { ticketEditPath, ticketPath } from "@/path";
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { TICKET_ICONS } from '@/features/constants';
+import { ticketEditPath, ticketPath } from '@/path';
+import { toCurrencyFromCent } from '@/utils/currency';
 
-import { deleteTicket } from "../actions/delete-ticket";
+import { deleteTicket } from '../actions/delete-ticket';
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -43,9 +50,9 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 
   return (
     <div
-      className={clsx("w-full flex gap-x-1", {
-        "max-w-[580px]": isDetail,
-        "max-w-[420px]": !isDetail,
+      className={clsx('w-full flex gap-x-1', {
+        'max-w-[580px]': isDetail,
+        'max-w-[420px]': !isDetail,
       })}
     >
       <Card className="w-full">
@@ -57,13 +64,19 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         </CardHeader>
         <CardContent>
           <p
-            className={clsx("whitespace-break-spaces", {
-              "line-clamp-3": !isDetail,
+            className={clsx('whitespace-break-spaces', {
+              'line-clamp-3': !isDetail,
             })}
           >
             {ticket.content}
           </p>
         </CardContent>
+        <CardFooter className="flex justify-between">
+          <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+          <p className="text-sm text-muted-foreground">
+            {toCurrencyFromCent(ticket.bounty)}
+          </p>
+        </CardFooter>
       </Card>
       <div className="flex flex-col gap-y-1">
         {isDetail ? (
