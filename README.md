@@ -1,17 +1,16 @@
 ## Prisma - Create the migration file
 
+Use this only locally (development environment).
+This creates and runs migration, saves state in the `/migrations` folder.
+
 ```bash
-npx prisma migrate dev --name init
+npm run migrate:dev -- my-migration-name
 ```
 
-## Prisma - aplikowanie migracji na bazie danych
-
-Tej komendy używam, gdy mam już pliki z migracjami
-ale jeszcze nie mam postawionej bazy danych (np. wyczyściłem bazę danych
-albo pobrałem repo i na świeżo odpalam aplikację).
+Use this in production. It only aplies what was created in the `/migrations` folder.
 
 ```bash
-npx prisma migrate deploy
+npm run migrate:prod
 ```
 
 ## Prisma - generate Prisma client

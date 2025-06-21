@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { Ticket } from '@prisma/client';
 import clsx from 'clsx';
-import { Pencil, SquareArrowOutUpRight, Trash } from 'lucide-react';
+import { MoreVertical, Pencil, SquareArrowOutUpRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -16,7 +16,7 @@ import { TICKET_ICONS } from '@/features/constants';
 import { ticketEditPath, ticketPath } from '@/path';
 import { toCurrencyFromCent } from '@/utils/currency';
 
-import { deleteTicket } from '../actions/delete-ticket';
+import { TicketMoreMenu } from './ticket-more-menu';
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -40,12 +40,15 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     </Button>
   );
 
-  const deleteButton = (
-    <form action={deleteTicket.bind(null, ticket.id)}>
-      <Button size="icon" variant="outline">
-        <Trash className="h-4 w-4" />
-      </Button>
-    </form>
+  const moreMenu = (
+    <TicketMoreMenu
+      ticket={ticket}
+      trigger={
+        <Button variant="outline" size="icon">
+          <MoreVertical className="h-4 w-4" />
+        </Button>
+      }
+    />
   );
 
   return (
@@ -57,7 +60,7 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     >
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="flex gap-x-2">
+          <CardTitle className="flex items-center gap-x-2">
             <span>{TICKET_ICONS[ticket.status]}</span>
             <span className="truncate">{ticket.title}</span>
           </CardTitle>
@@ -82,7 +85,7 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         {isDetail ? (
           <>
             {editButton}
-            {deleteButton}
+            {moreMenu}
           </>
         ) : (
           <>
