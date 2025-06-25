@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { TICKET_ICONS } from '@/features/constants';
+import { TICKET_ICONS } from '@/features/ticket/constants';
 import { ticketEditPath, ticketPath } from '@/path';
 import { toCurrencyFromCent } from '@/utils/currency';
 

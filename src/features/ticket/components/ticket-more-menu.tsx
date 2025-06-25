@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { TICKET_STATUS_LABELS } from '@/features/constants';
+import { TICKET_STATUS_LABELS } from '@/features/ticket/constants';
 
 import { deleteTicket } from '../actions/delete-ticket';
 import { updateTicketStatus } from '../actions/update-ticket-status';

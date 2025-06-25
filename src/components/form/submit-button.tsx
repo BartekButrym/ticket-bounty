@@ -1,19 +1,40 @@
-import { LoaderCircle } from "lucide-react";
-import { useFormStatus } from "react-dom";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { cloneElement } from 'react';
+
+import { LoaderCircle } from 'lucide-react';
+import { useFormStatus } from 'react-dom';
+
+import { Button } from '@/components/ui/button';
 
 type SubmitButtonProps = {
-  label: string;
+  label?: string;
+  icon?: React.ReactElement<React.SVGProps<SVGSVGElement>, 'svg'>;
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
 };
 
-export const SubmitButton = ({ label }: SubmitButtonProps) => {
+export const SubmitButton = ({
+  label,
+  icon,
+  variant = 'default',
+  size = 'default',
+}: SubmitButtonProps) => {
   const { pending } = useFormStatus();
 
   return (
-    <Button disabled={pending} type="submit">
-      {pending && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+    <Button disabled={pending} type="submit" variant={variant} size={size}>
+      {pending && <LoaderCircle className="h-4 w-4 animate-spin" />}
       {label}
+      {pending ? null : icon ? (
+        <span>{cloneElement(icon, { className: 'h-4 w-4' })}</span>
+      ) : null}
     </Button>
   );
 };
