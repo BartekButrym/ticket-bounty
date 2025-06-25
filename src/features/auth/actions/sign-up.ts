@@ -1,18 +1,18 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { hash } from '@node-rs/argon2';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
+import { setSessionCookie } from '@/auth/cookie';
+import { hashPassword } from '@/auth/password';
+import { createSession, generateRandomSessionToken } from '@/auth/session';
 import {
   ActionState,
   fromErrorToActionState,
   toActionState,
 } from '@/components/form/utils/to-action-state';
-import { lucia } from '@/lib/lucia';
 import { prisma } from '@/lib/prisma';
 import { ticketsPath } from '@/path';
 
@@ -46,7 +46,7 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
       Object.fromEntries(formData)
     );
 
-    const passwordHash = await hash(password);
+    const passwordHash = await hashPassword(password);
 
     const user = await prisma.user.create({
       data: {
@@ -56,14 +56,10 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
       },
     });
 
-    const session = await lucia.createSession(user.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
+    const sessionToken = generateRandomSessionToken();
+    const session = await createSession(sessionToken, user.id);
 
-    (await cookies()).set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
+    await setSessionCookie(sessionToken, session.expiresAt);
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

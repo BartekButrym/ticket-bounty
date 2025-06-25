@@ -1,12 +1,12 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { User as AuthUser } from 'lucia';
+import { User } from '@prisma/client';
 
-import { getAuth } from '../queries/get-auth';
+import { getAuth } from '@/auth/cookie';
 
 export const useAuth = () => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isFetched, setIsFetched] = useState(false);
 
   const pathname = usePathname();
