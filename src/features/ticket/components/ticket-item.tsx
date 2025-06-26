@@ -1,9 +1,11 @@
 import Link from 'next/link';
 
-import { Ticket } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import clsx from 'clsx';
 import { MoreVertical, Pencil, SquareArrowOutUpRight } from 'lucide-react';
 
+import { getAuth } from '@/auth/cookie';
+import { isOwner } from '@/auth/is-owner';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -19,11 +21,16 @@ import { toCurrencyFromCent } from '@/utils/currency';
 import { TicketMoreMenu } from './ticket-more-menu';
 
 type TicketItemProps = {
-  ticket: Ticket;
+  ticket: Prisma.TicketGetPayload<{
+    include: { user: { select: { username: true } } };
+  }>;
   isDetail?: boolean;
 };
 
-export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
+export const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
+  const { user } = await getAuth();
+  const isTicketOwner = isOwner(user, ticket);
+
   const detailButton = (
     <Button asChild size="icon" variant="outline">
       <Link prefetch href={ticketPath(ticket.id)}>
@@ -32,15 +39,15 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     </Button>
   );
 
-  const editButton = (
+  const editButton = isTicketOwner ? (
     <Button asChild size="icon" variant="outline">
       <Link prefetch href={ticketEditPath(ticket.id)}>
         <Pencil className="h-4 w-4" />
       </Link>
     </Button>
-  );
+  ) : null;
 
-  const moreMenu = (
+  const moreMenu = isTicketOwner ? (
     <TicketMoreMenu
       ticket={ticket}
       trigger={
@@ -49,7 +56,7 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         </Button>
       }
     />
-  );
+  ) : null;
 
   return (
     <div
@@ -75,7 +82,9 @@ export const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
           </p>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+          <p className="text-sm text-muted-foreground">
+            {ticket.deadline} by {ticket.user.username}
+          </p>
           <p className="text-sm text-muted-foreground">
             {toCurrencyFromCent(ticket.bounty)}
           </p>

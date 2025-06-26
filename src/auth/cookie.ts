@@ -1,7 +1,10 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { cache } from 'react';
+
+import { signInPath } from '@/path';
 
 import { SESSION_COOKIE_NAME } from './constants';
 import { validateSession } from './session';
@@ -51,3 +54,13 @@ export const getAuth = cache(async () => {
 
   return validateSession(sessionToken);
 });
+
+export const getAuthOrRedirect = async () => {
+  const auth = await getAuth();
+
+  if (!auth.user) {
+    redirect(signInPath());
+  }
+
+  return auth;
+};
