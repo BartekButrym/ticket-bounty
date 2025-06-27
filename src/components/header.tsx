@@ -2,14 +2,13 @@
 
 import Link from 'next/link';
 
-import { Kanban, LogOut } from 'lucide-react';
+import { Kanban } from 'lucide-react';
 
 import { buttonVariants } from '@/components/ui/button';
-import { signOut } from '@/features/auth/actions/sign-out';
 import { useAuth } from '@/features/auth/hooks/use-auth';
-import { homePath, signInPath, signUpPath, ticketsPath } from '@/path';
+import { homePath, signInPath, signUpPath } from '@/path';
 
-import { SubmitButton } from './form/submit-button';
+import { AccountDropdown } from './account-dropdown';
 import { ThemeSwitcher } from './theme/theme-switcher';
 
 export const Header = () => {
@@ -20,17 +19,7 @@ export const Header = () => {
   }
 
   const navItems = user ? (
-    <>
-      <Link
-        href={ticketsPath()}
-        className={buttonVariants({ variant: 'default' })}
-      >
-        Tickets
-      </Link>
-      <form action={signOut}>
-        <SubmitButton label="Sign out" icon={<LogOut />} />
-      </form>
-    </>
+    <AccountDropdown user={user} />
   ) : (
     <>
       <Link
