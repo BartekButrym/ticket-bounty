@@ -4,12 +4,12 @@ import Link from 'next/link';
 
 import { Kanban } from 'lucide-react';
 
+import { ThemeSwitcher } from '@/components/theme/theme-switcher';
 import { buttonVariants } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { homePath, signInPath, signUpPath } from '@/path';
 
 import { AccountDropdown } from './account-dropdown';
-import { ThemeSwitcher } from './theme/theme-switcher';
 
 export const Header = () => {
   const { user, isFetched } = useAuth();

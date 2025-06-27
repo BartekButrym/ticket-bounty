@@ -3,10 +3,7 @@ import Link from 'next/link';
 import { User as AuthUser } from '@prisma/client';
 import { Lock, LogOut, User } from 'lucide-react';
 
-import { signOut } from '@/features/auth/actions/sign-out';
-import { accountPasswordPath, accountProfilePath } from '@/path';
-
-import { Avatar, AvatarFallback } from './ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +11,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
+import { signOut } from '@/features/auth/actions/sign-out';
+import { accountPasswordPath, accountProfilePath } from '@/path';
 
 type AccountDropdownProps = {
   user: AuthUser;
