@@ -1,28 +1,32 @@
 import { Placeholder } from '@/components/placeholder';
-import { SearchInput } from '@/components/search-input';
-import { SortSelect } from '@/components/sort-select';
 
 import { getTickets } from '../queries/get-tickets';
-import { SearchParams } from '../search-params';
+import { ParsedSearchParams } from '../search-params';
 import { TicketItem } from './ticket-item';
+import { TicketPagination } from './ticket-pagination';
+import { TicketSearchInput } from './ticket-search-input';
+import { TicketSortSelect } from './ticket-sort-select';
 
 interface TicketListProps {
   userId?: string;
-  searchParams: SearchParams;
+  searchParams: ParsedSearchParams;
 }
 
 export const TicketList = async ({ userId, searchParams }: TicketListProps) => {
-  const tickets = await getTickets(userId, searchParams);
+  const { list: tickets, metadata: ticketsMetadata } = await getTickets(
+    userId,
+    searchParams
+  );
 
   return (
     <div className="flex-1 flex flex-col items-center gap-y-4 animate-fade-from-top">
       <div className="w-full max-w-[420px] flex gap-x-2">
-        <SearchInput placeholder="Search tickets..." />
-        <SortSelect
-          defaultValue="newest"
+        <TicketSearchInput placeholder="Search tickets..." />
+        <TicketSortSelect
           options={[
-            { label: 'Newest', value: 'newest' },
-            { label: 'Bounty', value: 'bounty' },
+            { sortKey: 'createdAt', sortValue: 'desc', label: 'Newest' },
+            { sortKey: 'createdAt', sortValue: 'asc', label: 'Oldest' },
+            { sortKey: 'bounty', sortValue: 'desc', label: 'Bounty' },
           ]}
         />
       </div>
@@ -31,6 +35,10 @@ export const TicketList = async ({ userId, searchParams }: TicketListProps) => {
       ) : (
         <Placeholder label="No tickets found" />
       )}
+
+      <div className="w-full max-w-[420px]">
+        <TicketPagination paginatedTicketsMetadata={ticketsMetadata} />
+      </div>
     </div>
   );
 };
