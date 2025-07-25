@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 import { setSessionCookie } from '@/auth/cookie';
 import { hashPassword } from '@/auth/password';
-import { createSession, generateRandomSessionToken } from '@/auth/session';
+import { createSession } from '@/auth/session';
 import {
   ActionState,
   fromErrorToActionState,
@@ -15,6 +15,7 @@ import {
 } from '@/components/form/utils/to-action-state';
 import { prisma } from '@/lib/prisma';
 import { ticketsPath } from '@/path';
+import { generateRandomToken } from '@/utils/crypto';
 
 const signUpSchema = z
   .object({
@@ -56,7 +57,7 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
       },
     });
 
-    const sessionToken = generateRandomSessionToken();
+    const sessionToken = generateRandomToken();
     const session = await createSession(sessionToken, user.id);
 
     await setSessionCookie(sessionToken, session.expiresAt);

@@ -1,5 +1,17 @@
-const ForgotPassword = () => {
-  return <h2 className="text-lg">Forgot password page</h2>;
+import { CardCompact } from '@/components/card-compact';
+import { PasswordForgotForm } from '@/features/password/components/password-forgot-form';
+
+const PasswordForgotPage = () => {
+  return (
+    <div className="flex-1 flex flex-col justify-center items-center">
+      <CardCompact
+        title="Forgot Password"
+        description="Enter your email address to reset your password"
+        className="w-full max-w-[420px] animate-fade-from-top"
+        content={<PasswordForgotForm />}
+      />
+    </div>
+  );
 };
 
-export default ForgotPassword;
+export default PasswordForgotPage;

@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { setSessionCookie } from '@/auth/cookie';
 import { verifyPasswordHash } from '@/auth/password';
-import { createSession, generateRandomSessionToken } from '@/auth/session';
+import { createSession } from '@/auth/session';
 import {
   ActionState,
   fromErrorToActionState,
@@ -14,6 +14,7 @@ import {
 } from '@/components/form/utils/to-action-state';
 import { prisma } from '@/lib/prisma';
 import { ticketsPath } from '@/path';
+import { generateRandomToken } from '@/utils/crypto';
 
 const signInSchema = z.object({
   email: z.string().min(1, { message: 'Is required' }).max(191).email(),
@@ -40,7 +41,7 @@ export const signIn = async (_actionState: ActionState, formData: FormData) => {
       return toActionState('ERROR', 'Incorrect email or password', formData);
     }
 
-    const sessionToken = generateRandomSessionToken();
+    const sessionToken = generateRandomToken();
     const session = await createSession(sessionToken, user.id);
 
     await setSessionCookie(sessionToken, session.expiresAt);
