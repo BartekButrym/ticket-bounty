@@ -1,11 +1,8 @@
 import Link from 'next/link';
 
-import { Prisma } from '@prisma/client';
 import clsx from 'clsx';
 import { MoreVertical, Pencil, SquareArrowOutUpRight } from 'lucide-react';
 
-import { getAuth } from '@/auth/cookie';
-import { isOwner } from '@/auth/is-owner';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,24 +11,24 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Comments } from '@/features/comment/components/comments';
 import { TICKET_ICONS } from '@/features/ticket/constants';
 import { ticketEditPath, ticketPath } from '@/path';
 import { toCurrencyFromCent } from '@/utils/currency';
 
+import { TicketWithMetadata } from '../types';
 import { TicketMoreMenu } from './ticket-more-menu';
 
 type TicketItemProps = {
-  ticket: Prisma.TicketGetPayload<{
-    include: { user: { select: { username: true } } };
-  }>;
+  ticket: TicketWithMetadata;
   isDetail?: boolean;
+  comments?: React.ReactNode;
 };
 
-export const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
-  const { user } = await getAuth();
-  const isTicketOwner = isOwner(user, ticket);
-
+export const TicketItem = async ({
+  ticket,
+  isDetail,
+  comments,
+}: TicketItemProps) => {
   const detailButton = (
     <Button asChild size="icon" variant="outline">
       <Link prefetch href={ticketPath(ticket.id)}>
@@ -40,7 +37,7 @@ export const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
     </Button>
   );
 
-  const editButton = isTicketOwner ? (
+  const editButton = ticket.isOwner ? (
     <Button asChild size="icon" variant="outline">
       <Link prefetch href={ticketEditPath(ticket.id)}>
         <Pencil className="h-4 w-4" />
@@ -48,7 +45,7 @@ export const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
     </Button>
   ) : null;
 
-  const moreMenu = isTicketOwner ? (
+  const moreMenu = ticket.isOwner ? (
     <TicketMoreMenu
       ticket={ticket}
       trigger={
@@ -106,7 +103,7 @@ export const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
           )}
         </div>
       </div>
-      {isDetail ? <Comments ticketId={ticket.id} /> : null}
+      {comments}
     </div>
   );
 };
