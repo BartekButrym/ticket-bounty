@@ -14,8 +14,11 @@ import {
   toActionState,
 } from '@/components/form/utils/to-action-state';
 import { prisma } from '@/lib/prisma';
-import { ticketsPath } from '@/path';
+import { signInPath, ticketsPath } from '@/path';
 import { generateRandomToken } from '@/utils/crypto';
+
+import { sendEmailWelcome } from '../../password/email/send-email-welcome';
+import { getBaseUrl } from '../../password/utils/url';
 
 const signUpSchema = z
   .object({
@@ -61,6 +64,10 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
     const session = await createSession(sessionToken, user.id);
 
     await setSessionCookie(sessionToken, session.expiresAt);
+
+    const loginUrl = getBaseUrl() + signInPath();
+
+    await sendEmailWelcome(user.username, user.email, loginUrl);
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

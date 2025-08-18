@@ -22,8 +22,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Ticket bounty',
-  description: 'Ticket bounty application 🎫',
+  title: 'Bounty lane',
+  description: 'Bounty lane application 🎫',
 };
 
 export default function RootLayout({

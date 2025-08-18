@@ -53,7 +53,7 @@ export const Header = () => {
           className={buttonVariants({ variant: 'ghost' })}
         >
           <Kanban />
-          <h1 className="text-lg font-semibold">TicketBounty</h1>
+          <h1 className="text-lg font-semibold">BountyLane</h1>
         </Link>
       </div>
       <div className="flex items-center gap-x-2">
